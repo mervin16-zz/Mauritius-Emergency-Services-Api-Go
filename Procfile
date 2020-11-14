@@ -1,1 +1,1 @@
-web: main
+web: mes/bin/main
