@@ -18,8 +18,11 @@ func setupErrorRoutes(engine *gin.Engine) {
 
 func main() {
 
+	// Gin Mode
+	gin.SetMode(gin.ReleaseMode)
+
 	// Creates the Gin Engine
-	engine := gin.Default()
+	engine := gin.New()
 
 	// Setup the API Routes
 	setupMainRoutes(engine)
