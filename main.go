@@ -9,6 +9,7 @@ import (
 func setupRoutes(engine *gin.Engine) {
 	engine.GET("/mesg/:language/services", routes.AllServices)
 	engine.GET("/mesg/:language/service/:id", routes.OneService)
+	engine.GET("/mesg/:language/services/search", routes.SearchService)
 }
 
 func main() {
