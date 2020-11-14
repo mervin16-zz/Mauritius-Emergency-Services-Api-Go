@@ -16,8 +16,7 @@ func setupErrorRoutes(engine *gin.Engine) {
 	engine.NoRoute(routes.Error404Handler)
 }
 
-func main() {
-
+func setupServer() *gin.Engine {
 	// Gin Mode
 	gin.SetMode(gin.ReleaseMode)
 
@@ -30,6 +29,11 @@ func main() {
 	// Setup Error Routes
 	setupErrorRoutes(engine)
 
+	// Return engine
+	return engine
+}
+
+func main() {
 	// Run the engine
-	engine.Run()
+	setupServer().Run()
 }
