@@ -1,0 +1,3 @@
+# Ignore tests
+/tests
+*_test.go
