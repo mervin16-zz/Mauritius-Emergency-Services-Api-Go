@@ -7,31 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var singleJSONTest string = `{
-	"identifier": "security-police-direct-1",
-	"name": "Police Direct Line 1",
-	"type": "SECURITY",
-	"icon": "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-	"number": 999
-}`
-
-var multipleJSONTest string = `[
-	{
-		"identifier": "security-police-direct-1",
-		"name": "Police Direct Line 1",
-		"type": "SECURITY",
-		"icon": "https://img.icons8.com/fluent/100/000000/policeman-male.png",
-		"number": 999
-	},
-	{
-		"identifier": "health-samu",
-		"name": "Samu",
-		"type": "HEALTH",
-		"icon": "https://img.icons8.com/bubbles/100/000000/ambulance.png",
-		"number": 114
-	}
-]`
-
 type serviceStruct struct {
 	Identifier string `json:"identifier"`
 	Name       string `json:"name"`
@@ -40,30 +15,68 @@ type serviceStruct struct {
 	Number     int    `json:"number"`
 }
 
-func oneService(c *gin.Context) {
-
-	//language := c.Param("language")
-
-	var service serviceStruct
-
-	json.Unmarshal([]byte(singleJSONTest), &service)
-
-	c.JSON(200, service)
-
-	//fmt.Printf("%T\n", singleJSONTest)
+func getServiceFileByLanguage(language string) string {
+	// Get the correct json file
+	// according to appropriate language
+	// If language doesn't exists, returns default (english)
+	switch language {
+	case "en":
+		return "services_en.json"
+	case "fr":
+		return "services_fr.json"
+	default:
+		return "services_en.json"
+	}
 }
 
-func allServices(c *gin.Context) {
+func oneService(context *gin.Context) {
 
-	//language := c.Param("language")
+	// Fetches the services json file per
+	// appropriate language
+	servicesFile := getServiceFileByLanguage(context.Param("language"))
 
-	file, _ := ioutil.ReadFile("data/services_en.json")
+	// Reads the file
+	file, _ := ioutil.ReadFile("data/" + servicesFile)
 
-	var keys []serviceStruct
+	// Initialize array of services struct
+	var services []serviceStruct
 
-	json.Unmarshal([]byte(file), &keys)
+	// Unmarshal JSON data to struct
+	json.Unmarshal([]byte(file), &services)
 
-	c.JSON(200, gin.H{"services": keys, "message": "", "success": true})
+	// Iterate through each services to get
+	// by id
+	id := context.Param("id")
+	for _, service := range services {
+		if service.Identifier == id {
+			// Loads the data
+			context.JSON(200, gin.H{"services": []serviceStruct{service}, "message": "", "success": true})
+			return
+		}
+	}
+
+	// If none found
+	// Returns error
+	context.JSON(404, gin.H{"services": []serviceStruct{}, "message": "No services found under id " + id, "success": false})
+}
+
+func allServices(context *gin.Context) {
+
+	// Fetches the services json file per
+	// appropriate language
+	servicesFile := getServiceFileByLanguage(context.Param("language"))
+
+	// Reads the file
+	file, _ := ioutil.ReadFile("data/" + servicesFile)
+
+	// Initialize array of services struct
+	var services []serviceStruct
+
+	// Unmarshal JSON data to struct
+	json.Unmarshal([]byte(file), &services)
+
+	// Loads the data
+	context.JSON(200, gin.H{"services": services, "message": "", "success": true})
 }
 
 func setupRoutes(engine *gin.Engine) {
