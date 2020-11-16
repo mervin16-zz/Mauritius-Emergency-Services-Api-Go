@@ -1,12 +1,34 @@
-package main
+package tests
 
 import (
+	"mes/routes"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
+
+/******************* Setup Test Server *********************/
+func setupServer() *gin.Engine {
+	// Gin Mode
+	gin.SetMode(gin.ReleaseMode)
+
+	// Creates the Gin Engine
+	engine := gin.New()
+
+	// Setup the API Routes
+	engine.GET("/mesg/:language/services", routes.AllServices)
+	engine.GET("/mesg/:language/service/:id", routes.OneService)
+	engine.GET("/mesg/:language/services/search", routes.SearchService)
+
+	// Setup Error Routes
+	engine.NoRoute(routes.Error404Handler)
+
+	// Return engine
+	return engine
+}
 
 /************** Error Handling Tests **************/
 func TestPing404Errors1Of3(t *testing.T) {
@@ -75,7 +97,7 @@ func TestPingOneServiceWhenServiceExistsInEn(t *testing.T) {
 	router := setupServer()
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/service/security-police-direct-1", nil)
+	req, _ := http.NewRequest("GET", "/mesg/en/service/security-police-direct-2", nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, 200, w.Code)
