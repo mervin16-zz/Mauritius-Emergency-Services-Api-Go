@@ -1,0 +1,11 @@
+# Test files
+tests/
+
+# Github Workflows
+.github/
+
+# Heroku File
+Procfile
+
+# Exe Files
+*.exe
