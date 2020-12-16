@@ -12,7 +12,7 @@ To run the API locally, you need to have GO binaries installed along side the fo
 
 ## Base URL
 
-`https://mauritius-emergency-numbers-go.herokuapp.com/mesg`
+`https://mesg.th3pl4gu3.com`
 
 ## Usage
 
@@ -33,7 +33,6 @@ All responses will have the form
 English: `GET /en/{other parameters}`
 
 French: `GET /fr/{other parameters}`
-
 
 ### List all services
 
@@ -68,15 +67,14 @@ French: `GET /fr/{other parameters}`
 ```
 
 - `404 NOT FOUND` on failure
-  
+
 ```json
 {
     "services": [],
-    "message" : "An error occurred while processing your request.",
+    "message" : "Wrong routes used. Please read the docs on https://github.com/mervin16/Mauritius-Emergency-Services-Api-Go",
     "success" : false
 }
 ```
-
 
 ### Get a single service
 
@@ -104,15 +102,14 @@ French: `GET /fr/{other parameters}`
 ```
 
 - `404 NOT FOUND` if no services found
-  
+
 ```json
 {
     "services": [],
-    "message" : "No services found under this identifier.",
+    "message" : ""No services found under id {ID}",
     "success" : false
 }
 ```
-
 
 ### Search for services
 
@@ -145,7 +142,6 @@ French: `GET /fr/{other parameters}`
     "success" : true
 }
 ```
-
 
 ## License
 

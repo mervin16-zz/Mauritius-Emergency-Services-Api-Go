@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  mesg:
+    container_name: mes_go
+    image: mesg:1.1
+    build: ./
+    networks:
+      - mes_net
+    ports:
+      - 8080:8080
+    restart: always
+
+networks:
+  mes_net:
+    name: mes_network
+    driver: bridge

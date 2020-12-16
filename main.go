@@ -7,9 +7,9 @@ import (
 )
 
 func setupMainRoutes(engine *gin.Engine) {
-	engine.GET("/mesg/:language/services", routes.AllServices)
-	engine.GET("/mesg/:language/service/:id", routes.OneService)
-	engine.GET("/mesg/:language/services/search", routes.SearchService)
+	engine.GET("/:language/services", routes.AllServices)
+	engine.GET("/:language/service/:id", routes.OneService)
+	engine.GET("/:language/services/search", routes.SearchService)
 }
 
 func setupErrorRoutes(engine *gin.Engine) {

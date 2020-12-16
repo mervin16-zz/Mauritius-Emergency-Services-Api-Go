@@ -20,9 +20,9 @@ func setupServer() *gin.Engine {
 	engine := gin.New()
 
 	// Setup the API Routes
-	engine.GET("/mesg/:language/services", routes.AllServices)
-	engine.GET("/mesg/:language/service/:id", routes.OneService)
-	engine.GET("/mesg/:language/services/search", routes.SearchService)
+	engine.GET("/:language/services", routes.AllServices)
+	engine.GET("/:language/service/:id", routes.OneService)
+	engine.GET("/:language/services/search", routes.SearchService)
 
 	// Setup Error Routes
 	engine.NoRoute(routes.Error404Handler)
@@ -48,7 +48,7 @@ func TestResponse404Errors1Of3(t *testing.T) {
 		panic(err)
 	}
 
-	assert.Equal(t, "Wrong routes used. Please read the docs", response.Message)
+	assert.Equal(t, "Wrong routes used. Please read the docs on https://github.com/mervin16/Mauritius-Emergency-Services-Api-Go", response.Message)
 	assert.Equal(t, false, response.Success)
 	assert.Equal(t, []Service{}, response.Services)
 	assert.Equal(t, 404, w.Code)
@@ -59,7 +59,7 @@ func TestResponse404Errors2Of3(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/services/search", nil)
+	req, _ := http.NewRequest("GET", "/services/search", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -70,7 +70,7 @@ func TestResponse404Errors2Of3(t *testing.T) {
 		panic(err)
 	}
 
-	assert.Equal(t, "Wrong routes used. Please read the docs", response.Message)
+	assert.Equal(t, "Wrong routes used. Please read the docs on https://github.com/mervin16/Mauritius-Emergency-Services-Api-Go", response.Message)
 	assert.Equal(t, false, response.Success)
 	assert.Equal(t, []Service{}, response.Services)
 	assert.Equal(t, 404, w.Code)
@@ -92,7 +92,7 @@ func TestResponse404Errors3Of3(t *testing.T) {
 		panic(err)
 	}
 
-	assert.Equal(t, "Wrong routes used. Please read the docs", response.Message)
+	assert.Equal(t, "Wrong routes used. Please read the docs on https://github.com/mervin16/Mauritius-Emergency-Services-Api-Go", response.Message)
 	assert.Equal(t, false, response.Success)
 	assert.Equal(t, []Service{}, response.Services)
 	assert.Equal(t, 404, w.Code)
@@ -104,7 +104,7 @@ func TestResponseAllServicesWhenLanguageIsEn(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/services", nil)
+	req, _ := http.NewRequest("GET", "/en/services", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -125,7 +125,7 @@ func TestResponseAllServicesWhenLanguageIsFr(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/fr/services", nil)
+	req, _ := http.NewRequest("GET", "/fr/services", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -146,7 +146,7 @@ func TestResponseAllServicesWhenLanguageIsUndefined(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/sp/services", nil)
+	req, _ := http.NewRequest("GET", "/sp/services", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -168,7 +168,7 @@ func TestResponseOneServiceWhenServiceExistsInEn(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/service/security-police-direct-2", nil)
+	req, _ := http.NewRequest("GET", "/en/service/security-police-direct-2", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -189,7 +189,7 @@ func TestResponseOneServiceWhenServiceDoesntExistsInEn(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/service/security-police-direct-4", nil)
+	req, _ := http.NewRequest("GET", "/en/service/security-police-direct-4", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -210,7 +210,7 @@ func TestResponseOneServiceWhenServiceExistsInFr(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/fr/service/security-police-direct-1", nil)
+	req, _ := http.NewRequest("GET", "/fr/service/security-police-direct-1", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -231,7 +231,7 @@ func TestResponseOneServiceWhenServiceDoesntExistsInFr(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/fr/service/security-police-direct-4", nil)
+	req, _ := http.NewRequest("GET", "/fr/service/security-police-direct-4", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -253,7 +253,7 @@ func TestResponseSearchServicesWhenQueryMatchesInEn1Of2(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/services/search?query=police-direct", nil)
+	req, _ := http.NewRequest("GET", "/en/services/search?query=police-direct", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -274,7 +274,7 @@ func TestResponseSearchServicesWhenQueryMatchesInEn2Of2(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/services/search?query=pol", nil)
+	req, _ := http.NewRequest("GET", "/en/services/search?query=pol", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -295,7 +295,7 @@ func TestResponseSearchServicesWhenQueryDoesntMatchInEn(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/services/search?query=poolicing", nil)
+	req, _ := http.NewRequest("GET", "/en/services/search?query=poolicing", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -316,7 +316,7 @@ func TestResponseSearchServicesWhenQueryIsEmptyInEn(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/en/services/search?query=", nil)
+	req, _ := http.NewRequest("GET", "/en/services/search?query=", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -337,7 +337,7 @@ func TestResponseSearchServicesWhenQueryMatchesInFr1Of2(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/fr/services/search?query=police-direct", nil)
+	req, _ := http.NewRequest("GET", "/fr/services/search?query=police-direct", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -358,7 +358,7 @@ func TestResponseSearchServicesWhenQueryMatchesInFr2Of2(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/fr/services/search?query=pol", nil)
+	req, _ := http.NewRequest("GET", "/fr/services/search?query=pol", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -379,7 +379,7 @@ func TestResponseSearchServicesWhenQueryDoesntMatchInFr(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/fr/services/search?query=poolicing", nil)
+	req, _ := http.NewRequest("GET", "/fr/services/search?query=poolicing", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body
@@ -400,7 +400,7 @@ func TestResponseSearchServicesWhenQueryIsEmptyInFr(t *testing.T) {
 	response := Response{}
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/mesg/fr/services/search?query=", nil)
+	req, _ := http.NewRequest("GET", "/fr/services/search?query=", nil)
 	router.ServeHTTP(w, req)
 
 	// Extract body

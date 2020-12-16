@@ -24,7 +24,7 @@ func TestGetServiceFileByLanguage(t *testing.T) {
 
 		// Assert if errors
 		if output := helper.GetServiceFileByLanguage(test.input); output != test.expected {
-			t.Error("Test Faile: {} input, {} expected, received {}", test.input, test.expected, output)
+			t.Error("Test Failed: {} input, {} expected, received {}", test.input, test.expected, output)
 		}
 	}
 }
