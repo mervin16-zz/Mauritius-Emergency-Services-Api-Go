@@ -106,7 +106,7 @@ French: `GET /fr/{other parameters}`
 ```json
 {
     "services": [],
-    "message" : ""No services found under id {ID}",
+    "message" : "No services found under id {ID}",
     "success" : false
 }
 ```
